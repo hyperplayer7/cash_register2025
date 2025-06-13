@@ -1,0 +1,24 @@
+<h1>Cash Register</h1>
+
+<h2>Products</h2>
+<%= form_with url: add_item_cart_path, method: :post, local: true do %>
+  <%= select_tag :code, options_from_collection_for_select(Product.all, :code, :name) %>
+  <%= submit_tag "Add to Cart" %>
+<% end %>
+
+<% if flash[:notice] %>
+  <p style="color: green;"><%= flash[:notice] %></p>
+<% elsif flash[:alert] %>
+  <p style="color: red;"><%= flash[:alert] %></p>
+<% end %>
+
+<h2>Cart</h2>
+<ul>
+  <% @cart.items.each do |item| %>
+    <li>[<%=item.code%>] <%= item.name %> - €<%= item.price %></li>
+  <% end %>
+</ul>
+
+<h3>Total: €<%= @cart.total %></h3>
+<%= button_to "Empty Cart", empty_cart_path, method: :delete, data: { confirm: "Are you sure you want to empty the cart?" } %>
+
